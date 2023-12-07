@@ -4,8 +4,12 @@ import com.sun.source.tree.NewArrayTree;
 import jdk.jfr.Category;
 import todo.model.Cotegori;
 import todo.model.Note;
+import todo.repositorii.DbTodo;
+import todo.service.TodoService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TodoController {
     public static void main(String[] args) {
@@ -16,6 +20,18 @@ public class TodoController {
         noteForGym.add(n1);
         noteForGym.add(n2);
         gym.setNotesList(noteForGym);
-        System.out.println(gym);
+
+        Map <Integer, Cotegori> mapForDb = new HashMap<>();
+        DbTodo dbTodo = new DbTodo(mapForDb);
+        TodoService todoService = new TodoService(dbTodo);
+        try {
+            todoService.addNoteToCotegori(10, n1);
+        }catch (RuntimeException exception){
+            System.out.println("ERROR " + exception.getMessage());
+        }
+
+
+        System.out.println("Пришол как то в зону черный сталкер");
+
     }
 }
