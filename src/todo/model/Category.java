@@ -1,15 +1,14 @@
 package todo.model;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-// Category ( id, Name, AreyList )
-public class Cotegori {
+public class Category {
     private Integer id;
     private String name;
-    private ArrayList<Note> notesList;
+    private List<Note> notesList;
 
-    public Cotegori(Integer id, String name, ArrayList<Note> notesList) {
+    public Category(Integer id, String name, List<Note> notesList) {
         this.id = id;
         this.name = name;
         this.notesList = notesList;
@@ -23,7 +22,7 @@ public class Cotegori {
         this.name = name;
     }
 
-    public void setNotesList(ArrayList<Note> notesList) {
+    public void setNotesList(List<Note> notesList) {
         this.notesList = notesList;
     }
 
@@ -35,7 +34,7 @@ public class Cotegori {
         return name;
     }
 
-    public ArrayList<Note> getNotesList() {
+    public List<Note> getNotesList() {
         return notesList;
     }
 
@@ -52,7 +51,7 @@ public class Cotegori {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Cotegori cotegori = (Cotegori) o;
+        Category cotegori = (Category) o;
         return Objects.equals(id, cotegori.id) && Objects.equals(name, cotegori.name) && Objects.equals(notesList, cotegori.notesList);
     }
 
