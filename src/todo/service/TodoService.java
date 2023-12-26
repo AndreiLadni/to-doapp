@@ -5,28 +5,18 @@ import todo.model.Note;
 import todo.model.NotePriority;
 import todo.repositorii.DbTodo;
 import todo.service.filter.NoteFilter;
-import todo.service.filter.NoteFilterByHighPriority;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 14.12.2023
- * TODO: merge git
- * TODO: add interface for TodoService
- * TODO: implement getAllNotesByPriority with lambda
- * TODO: implement getAllNotesByCategoryName with lambda
- * TODO: getAllNotesByContainsNoteName with lambda
- * ---------------------
- * TODO: need to add filed "description" String
- * TODO: need to add filed "deadline" LocalDate
- *
+ * x: need to add filed "description" String
+ * x: need to add filed "deadline" LocalDate
  * FILTER:
+ * x: filter by containsNoteName
  * TODO: get all notes witch deadline is done
- *
  * SORTING:
  * TODO: get all notes sorted by priority
- *
  * CRUD:
  * TODO: update Note by Note id
  * TODO: update Category by Category id
@@ -34,7 +24,7 @@ import java.util.List;
  * TODO: delete Category by Category id
  */
 public class TodoService {
-    private DbTodo db;
+    private final DbTodo db;
 
     public TodoService(DbTodo db) {
         this.db = db;
@@ -98,49 +88,6 @@ public class TodoService {
         List<Note> allNotesByPriority = new ArrayList<>();
         for (Category category : categories) {
             List<Note> notesFromCurrentCategory = category.getNotesList();
-            List<Note> filteredNotesFromCurrantCategory
-                    = filterNotes(notesFromCurrentCategory, new NoteFilterByHighPriority());
-            allNotesByPriority.addAll(filteredNotesFromCurrantCategory);
-        }
-
-        return allNotesByPriority;
-    }
-
-    /*public List<Note> getAllNotesByPriority(NotePriority priority) {
-        List<Category> categories = new ArrayList<>(db.getCategoryMap().values());
-
-        List<Note> allNotesByPriority = new ArrayList<>();
-        for (Category category : categories) {
-            List<Note> notesFromCurrentCategory = category.getNotesList();
-            List<Note> filteredNotesFromCurrantCategory
-                    = filterNotes(notesFromCurrentCategory, new NoteFilter() {
-                @Override
-                public List<Note> applyFilter(List<Note> notes) {
-                    List<Note> filteredNotes = new ArrayList<>();
-                    for (Note note : notes) {
-                        if (note.getPriority() == null) {
-                            continue;
-                        }
-
-                        if (note.getPriority().equals(priority)) {
-                            filteredNotes.add(note);
-                        }
-                    }
-                    return filteredNotes;
-                }
-            });
-            allNotesByPriority.addAll(filteredNotesFromCurrantCategory);
-        }
-
-        return allNotesByPriority;
-    }*/
-
-    /*public List<Note> getAllNotesByPriority(NotePriority priority) {
-        List<Category> categories = new ArrayList<>(db.getCategoryMap().values());
-
-        List<Note> allNotesByPriority = new ArrayList<>();
-        for (Category category : categories) {
-            List<Note> notesFromCurrentCategory = category.getNotesList();
 
             List<Note> filteredNotesFromCurrantCategory = filterNotes(notesFromCurrentCategory, (List<Note> notes) -> {
                 List<Note> filteredNotes = new ArrayList<>();
@@ -159,7 +106,30 @@ public class TodoService {
         }
 
         return allNotesByPriority;
-    }*/
+    }
+
+    public List<Note> getAllNotesByContainsNoteName(String noteName) {
+        List<Category> categoriesFromDb = new ArrayList<>(db.getCategoryMap().values());
+
+        List<Note> notesThatContainsNoteName = new ArrayList<>();
+        for (Category category : categoriesFromDb) {
+            List<Note> noteListFromDb = category.getNotesList();
+
+            List<Note> filteredNoteWithTargetNoteName = filterNotes(
+                    noteListFromDb, notes -> {
+                        List<Note> result = new ArrayList<>();
+                        for (Note note : notes) {
+                            if (note.getName().contains(noteName)) {
+                                result.add(note);
+                            }
+                        }
+                        return result;
+                    }
+            );
+            notesThatContainsNoteName.addAll(filteredNoteWithTargetNoteName);
+        }
+        return notesThatContainsNoteName;
+    }
 
     private List<Note> filterNotes(List<Note> notes, NoteFilter noteFilter) {
         return noteFilter.applyFilter(notes);
