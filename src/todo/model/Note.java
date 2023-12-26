@@ -1,17 +1,22 @@
 package todo.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Note {
 
     private Integer id;
     private String name;
+    private String description;
+    private LocalDate deadline;
     private Integer categoryId;
     private NotePriority priority;
 
-    public Note(Integer id, String name, Integer categoryId, NotePriority priority) {
+    public Note(Integer id, String name, String description, LocalDate deadline, Integer categoryId, NotePriority priority) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.deadline = deadline;
         this.categoryId = categoryId;
         this.priority = priority;
     }
@@ -21,6 +26,7 @@ public class Note {
         this.name = name;
         this.categoryId = categoryId;
     }
+
     public Integer getId() {
         return id;
     }
@@ -35,6 +41,22 @@ public class Note {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 
     public Integer getCategoryId() {
@@ -56,8 +78,10 @@ public class Note {
     @Override
     public String toString() {
         return "Note" +
-                "id=" + id +
+                " id=" + id +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", deadline=" + deadline +
                 ", categoryId=" + categoryId +
                 ", priority=" + priority;
     }
@@ -71,11 +95,11 @@ public class Note {
             return false;
         }
         Note note = (Note) o;
-        return Objects.equals(id, note.id) && Objects.equals(name, note.name) && Objects.equals(categoryId, note.categoryId) && priority == note.priority;
+        return Objects.equals(id, note.id) && Objects.equals(name, note.name) && Objects.equals(description, note.description) && Objects.equals(deadline, note.deadline) && Objects.equals(categoryId, note.categoryId) && priority == note.priority;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, categoryId, priority);
+        return Objects.hash(id, name, description, deadline, categoryId, priority);
     }
 }
