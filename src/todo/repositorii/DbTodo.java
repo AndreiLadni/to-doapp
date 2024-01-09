@@ -2,6 +2,8 @@ package todo.repositorii;
 
 import todo.model.Category;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DbTodo {
@@ -14,6 +16,12 @@ public class DbTodo {
     }
 
     public DbTodo() {
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> allCategoriesFromDb = new ArrayList<>();
+        allCategoriesFromDb.addAll(categoryMap.values());
+        return allCategoriesFromDb;
     }
 
     public Integer incrementCategoryIndexAndGet(){
