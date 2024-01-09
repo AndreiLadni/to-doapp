@@ -1,5 +1,6 @@
 package todo.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Note {
@@ -21,6 +22,7 @@ public class Note {
         this.name = name;
         this.categoryId = categoryId;
     }
+
     public Integer getId() {
         return id;
     }
@@ -56,7 +58,7 @@ public class Note {
     @Override
     public String toString() {
         return "Note" +
-                "id=" + id +
+                " id=" + id +
                 ", name='" + name + '\'' +
                 ", categoryId=" + categoryId +
                 ", priority=" + priority;

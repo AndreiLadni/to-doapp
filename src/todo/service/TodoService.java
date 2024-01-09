@@ -4,37 +4,30 @@ import todo.model.Category;
 import todo.model.Note;
 import todo.model.NotePriority;
 import todo.repositorii.DbTodo;
-import todo.service.filter.NoteFilter;
-import todo.service.filter.NoteFilterByHighPriority;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 14.12.2023
- * TODO: merge git
- * TODO: add interface for TodoService
- * TODO: implement getAllNotesByPriority with lambda
- * TODO: implement getAllNotesByCategoryName with lambda
- * TODO: getAllNotesByContainsNoteName with lambda
- * ---------------------
- * TODO: need to add filed "description" String
- * TODO: need to add filed "deadline" LocalDate
+ * ====> Classwork <====
+ *
+ * FIELDS:
+ * TODO: need to add filed "description" to Note class
+ * TODO: need to add filed "deadline" to Note class
  *
  * FILTER:
- * TODO: get all notes witch deadline is done
+ * TODO: create method that filter by priority with Stream
+ * TODO: create method that filter by containsNoteName
+ * TODO: create method that filter by containsNoteName with Stream
+ *
+ * ====> Homework <====
+ * TODO: create method that filter by date with Stream
  *
  * SORTING:
- * TODO: get all notes sorted by priority
- *
- * CRUD:
- * TODO: update Note by Note id
- * TODO: update Category by Category id
- * TODO: delete Note by Note id
- * TODO: delete Category by Category id
+ * TODO: create method that get all notes sorted by priority
  */
 public class TodoService {
-    private DbTodo db;
+    private final DbTodo db;
 
     public TodoService(DbTodo db) {
         this.db = db;
@@ -93,75 +86,44 @@ public class TodoService {
     }
 
     public List<Note> getAllNotesByPriority(NotePriority priority) {
-        List<Category> categories = new ArrayList<>(db.getCategoryMap().values());
+        List<Category> categoriesFromDb = db.getAllCategories();
 
-        List<Note> allNotesByPriority = new ArrayList<>();
-        for (Category category : categories) {
-            List<Note> notesFromCurrentCategory = category.getNotesList();
-            List<Note> filteredNotesFromCurrantCategory
-                    = filterNotes(notesFromCurrentCategory, new NoteFilterByHighPriority());
-            allNotesByPriority.addAll(filteredNotesFromCurrantCategory);
+        List<Note> filteredNotesByPriority = new ArrayList<>();
+        for (Category category : categoriesFromDb) {
+            List<Note> notesFromCategory = category.getNotesList();
+
+            for (Note note : notesFromCategory) {
+                if (note.getPriority() != null && note.getPriority().equals(priority)) {
+                    filteredNotesByPriority.add(note);
+                }
+            }
         }
-
-        return allNotesByPriority;
+        return filteredNotesByPriority;
     }
 
-    /*public List<Note> getAllNotesByPriority(NotePriority priority) {
-        List<Category> categories = new ArrayList<>(db.getCategoryMap().values());
+    /**
+     * getAllNotesByPriority with Stream
+     */
+//    public List<Note> getAllNotesByPriorityUsingStream(NotePriority priority) {
+//        List<Category> categoriesFromDb = db.getAllCategories();
+//
+//        return categoriesFromDb.stream()
+//                .flatMap(category -> category.getNotesList().stream())
+//                .filter(note -> note.getPriority() != null)
+//                .filter(note -> note.getPriority().equals(priority))
+//                .toList();
+//    }
 
-        List<Note> allNotesByPriority = new ArrayList<>();
-        for (Category category : categories) {
-            List<Note> notesFromCurrentCategory = category.getNotesList();
-            List<Note> filteredNotesFromCurrantCategory
-                    = filterNotes(notesFromCurrentCategory, new NoteFilter() {
-                @Override
-                public List<Note> applyFilter(List<Note> notes) {
-                    List<Note> filteredNotes = new ArrayList<>();
-                    for (Note note : notes) {
-                        if (note.getPriority() == null) {
-                            continue;
-                        }
-
-                        if (note.getPriority().equals(priority)) {
-                            filteredNotes.add(note);
-                        }
-                    }
-                    return filteredNotes;
-                }
-            });
-            allNotesByPriority.addAll(filteredNotesFromCurrantCategory);
-        }
-
-        return allNotesByPriority;
-    }*/
-
-    /*public List<Note> getAllNotesByPriority(NotePriority priority) {
-        List<Category> categories = new ArrayList<>(db.getCategoryMap().values());
-
-        List<Note> allNotesByPriority = new ArrayList<>();
-        for (Category category : categories) {
-            List<Note> notesFromCurrentCategory = category.getNotesList();
-
-            List<Note> filteredNotesFromCurrantCategory = filterNotes(notesFromCurrentCategory, (List<Note> notes) -> {
-                List<Note> filteredNotes = new ArrayList<>();
-                for (Note note : notes) {
-                    if (note.getPriority() == null) {
-                        continue;
-                    }
-                    if (note.getPriority().equals(priority)) {
-                        filteredNotes.add(note);
-                    }
-                }
-                return filteredNotes;
-            });
-
-            allNotesByPriority.addAll(filteredNotesFromCurrantCategory);
-        }
-
-        return allNotesByPriority;
-    }*/
-
-    private List<Note> filterNotes(List<Note> notes, NoteFilter noteFilter) {
-        return noteFilter.applyFilter(notes);
-    }
+    /**
+     * getAllNotesByContainsNoteName with Stream
+     */
+//    public List<Note> getAllNotesByContainsNoteNameUsingUsingStream(String noteName) {
+//        List<Category> categoriesFromDb = new ArrayList<>(db.getCategoryMap().values());
+//
+//        return categoriesFromDb.stream()
+//                .flatMap(category -> category.getNotesList().stream())
+//                .filter(note -> note.getName() != null)
+//                .filter(note -> note.getName().contains(noteName))
+//                .toList();
+//    }
 }
